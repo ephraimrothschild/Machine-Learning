@@ -1,8 +1,7 @@
 __author__ = 'Ephraim'
-import math
 import numpy as np
-import io
 from operator import itemgetter
+# The data was taken from http://www.iro.umontreal.ca/~lisa/twiki/bin/view.cgi/Public/RectanglesData
 # data label will be 0 if rectangle is tall, 1 if it is wide
 # The last column in each line is the label
 
@@ -34,20 +33,26 @@ def predict(array):
         return 0
 
 def test():
-    file = open("C:/Users/Ephraim/Downloads/rectangles/rectangles_test.amat", "r")
-    lines = np.loadtxt(file)
+    test_file = open("C:/Users/Ephraim/Downloads/rectangles/rectangles_test.amat", "r")
+    lines = np.loadtxt(test_file)
     true = 0
     false = 0
-    for num in range (0,500):
+    wide = 0
+    tall = 0
+    for num in range(0, 1000):
         line = lines[num]
-        result = predict(line[:-1],line[-1])
+        result = predict(line[:-1])
         # print(result)
         # print(line[-1])
         # print()
+        if result: wide += 1
+        else: tall+=1
         if (result == 0 and line[-1] <= 0) or (result == 1 and line[-1] > 0):
             true += 1
         else:
             false += 1
+    print("Number of Estimated Tall Rectangles:  " + tall.__str__())
+    print("Number of Estimated Wide Rectangles:  " + wide.__str__())
     print("Number of Accurate Estimates:  " + true.__str__())
     print("Number of Errors:              " + false.__str__())
 
