@@ -1,5 +1,6 @@
 __author__ = 'Ephraim'
 import numpy as np
+import io
 from operator import itemgetter
 # The data was taken from http://www.iro.umontreal.ca/~lisa/twiki/bin/view.cgi/Public/RectanglesData
 # data label will be 0 if rectangle is tall, 1 if it is wide
@@ -7,6 +8,8 @@ from operator import itemgetter
 
 # Train
 file = open("rectangles_train.amat", "r")
+# file = open("C:/Users/Ephraim/Downloads/rectangles_images/rectangles_im_test.amat", "r")
+
 training_data = np.array(np.loadtxt(file))
 
 # Distance function
@@ -33,8 +36,14 @@ def predict(array):
         return 0
 
 def test():
+    # test_file = open("C:/Users/Ephraim/Downloads/rectangles_images/rectangles_im_test.amat", "r")
     test_file = open("C:/Users/Ephraim/Downloads/rectangles/rectangles_test.amat", "r")
-    lines = np.loadtxt(test_file)
+    # lines = np.loadtxt(test_file)
+    text_lines = test_file.readlines()
+    lines = []
+    for num in range(0,1000):
+        lines.append(np.loadtxt(io.StringIO(text_lines[num])))
+
     true = 0
     false = 0
     wide = 0
