@@ -29,7 +29,7 @@ def predict(array):
     votedOn = -1
     largestVote = -1
     # print(votesPerNumber)
-    for num in range(0,9):
+    for num in range(0,10):
         if votesPerNumber[num] > largestVote:
             votedOn = num
             largestVote = votesPerNumber[num]
@@ -58,7 +58,7 @@ def test():
             true += 1
         else:
             false += 1
-    for index in range(0,9):
+    for index in range(0,10):
         print("Number of " + index.__str__() + "s predicted:   " + predictions[index].__str__())
     print("Number of Accurate Estimates:  " + true.__str__())
     print("Number of Errors:              " + false.__str__())
