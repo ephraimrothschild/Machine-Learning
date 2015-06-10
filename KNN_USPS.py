@@ -47,6 +47,7 @@ def test():
     true = 0
     false = 0
     predictions = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    labels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for num in range(0, 1000):
         line = lines[num]
         result = predict(line[1:])
@@ -54,12 +55,15 @@ def test():
         # print(line[-1])
         # print()
         predictions[int(result)] += 1
-        if (result == line[0]):
+        labels[int(line[0])] += 1
+        if result == line[0]:
             true += 1
         else:
             false += 1
     for index in range(0,10):
         print("Number of " + index.__str__() + "s predicted:   " + predictions[index].__str__())
+        print("                     Vs:  "+ labels[index].__str__() + " real ones")
+    print("\n")
     print("Number of Accurate Estimates:  " + true.__str__())
     print("Number of Errors:              " + false.__str__())
 
