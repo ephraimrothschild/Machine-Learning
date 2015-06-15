@@ -63,7 +63,7 @@ def test():
     for index in range(0,10):
         print("Number of " + index.__str__() + "s predicted:   " + predictions[index].__str__())
         print("                     Vs:  "+ labels[index].__str__() + " real ones")
-    print("\n")
+    print()
     print("Number of Accurate Estimates:  " + true.__str__())
     print("Number of Errors:              " + false.__str__())
 
