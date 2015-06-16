@@ -1,6 +1,7 @@
 __author__ = 'Ephraim'
 import numpy as np
 import io
+import random
 
 # This code represents the Perceptron algorithm for determining if a square is tall or wide.
 # The data was taken from http://www.iro.umontreal.ca/~lisa/twiki/bin/view.cgi/Public/RectanglesData
@@ -33,17 +34,19 @@ class Perceptron:
         print("Started Training...")
         training_file = open("rectangles_train.amat", "r")
         training_data = np.array(np.loadtxt(training_file))
-        for data in training_data:
-            training_array = data[:-1]
-            training_label = (2*data[-1])-1
-            self.train(training_array, training_label)
+        for n in range(0, 1000):
+            random.shuffle(training_data)
+            for data in training_data:
+                training_array = data[:-1]
+                training_label = (2*data[-1])-1
+                self.train(training_array, training_label)
         print("Training Complete!")
 
         print("Started Testing...")
         test_file = open("C:/Users/Ephraim/Downloads/rectangles/rectangles_test.amat", "r")
         text_lines = test_file.readlines()
         lines = []
-        for num in range(0,1000):
+        for num in range(0, 50):
             lines.append(np.loadtxt(io.StringIO(text_lines[num])))
 
         true = 0
