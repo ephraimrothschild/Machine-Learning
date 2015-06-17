@@ -3,10 +3,8 @@ import numpy as np
 import io
 import random
 
-# This code represents the Perceptron algorithm for determining if a square is tall or wide.
-# The data was taken from http://www.iro.umontreal.ca/~lisa/twiki/bin/view.cgi/Public/RectanglesData
-# data label will be 0 if rectangle is tall, 1 if it is wide
-# The last column in each line is the label
+# The data was taken from the Zip Code data at:
+#    http://statweb.stanford.edu/~tibs/ElemStatLearn/data.html
 
 class Perceptron:
     dim = 256
