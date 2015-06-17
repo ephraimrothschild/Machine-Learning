@@ -12,7 +12,7 @@ class Perceptron:
     dim = 784
     b = 0
     w = []
-    for num in range(0,dim):
+    for num in range(0, dim):
         w.append(0)
 
     def train(self, x, y):
@@ -34,7 +34,7 @@ class Perceptron:
         print("Started Training...")
         training_file = open("rectangles_train.amat", "r")
         training_data = np.array(np.loadtxt(training_file))
-        for n in range(0, 1000):
+        for n in range(0, 100):
             random.shuffle(training_data)
             for data in training_data:
                 training_array = data[:-1]
@@ -46,7 +46,7 @@ class Perceptron:
         test_file = open("C:/Users/Ephraim/Downloads/rectangles/rectangles_test.amat", "r")
         text_lines = test_file.readlines()
         lines = []
-        for num in range(0, 50):
+        for num in range(0, 1000):
             lines.append(np.loadtxt(io.StringIO(text_lines[num])))
 
         true = 0
@@ -71,7 +71,6 @@ class Perceptron:
                 false += 1
                 if label == -1: false_tall += 1
                 else: false_wide += 1
-
         print("Number of Real Tall Rectangles:  " + real_tall.__str__())
         print("Number of Real Wide Rectangles:  " + real_wide.__str__())
         print("Number of Estimated Tall Rectangles:  " + tall.__str__())
