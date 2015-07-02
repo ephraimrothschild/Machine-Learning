@@ -10,10 +10,12 @@ from operator import itemgetter
 
 class Perceptron:
     dim = 256
-    b = 0
-    w = []
-    for num in range(0, dim):
-        w.append(0)
+
+    def __init__(self):
+        self.b = 0
+        self.w = []
+        for num in range(0, self.dim):
+            self.w.append(0)
 
     def train_single_entry(self, x, y):
         a = self.predict_for_training(x)
@@ -59,10 +61,12 @@ class Perceptron:
 
 
 class MulticlassPerceptron:
-    perceptron_combinations = []
-    perceptrons = []
-    lower_bound = 0
-    upper_bound = 0
+
+    def __init__(self):
+        self.perceptron_combinations = []
+        self.perceptrons = []
+        self.lower_bound = 0
+        self.upper_bound = 0
 
     def train(self, low_bound, up_bound):
         self.lower_bound = low_bound
@@ -71,8 +75,11 @@ class MulticlassPerceptron:
         for n in range(self.lower_bound, self.upper_bound):
             number_list.append(n)
         self.perceptron_combinations = list(itertools.combinations(number_list, 2))
+        print(self.perceptron_combinations)
         for combo in self.perceptron_combinations:
-                self.perceptrons.append(Perceptron().train(combo[0], combo[1]))
+                new_perceptron = Perceptron()
+                new_perceptron.train(combo[0], combo[1])
+                self.perceptrons.append(new_perceptron)
 
     def predict(self, x):
         probability = {}
