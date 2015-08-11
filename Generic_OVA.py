@@ -15,10 +15,10 @@ class OVA:
 
             prediction_certainty = perceptron_wrapper.perceptron.predict(x)
             # print(n.__str__() + " : " + prediction_certainty.__str__() + "  ,  ", end="")
-            if prediction_certainty > 0:
-                probability[perceptron_wrapper.num_to_classify] = 1
-            else:
-                probability[perceptron_wrapper.num_to_classify] = prediction_certainty
+            # if prediction_certainty > 0:
+            #     probability[perceptron_wrapper.num_to_classify] = 1
+            # else:
+            probability[perceptron_wrapper.num_to_classify] = prediction_certainty
             # else:
             #     for prob in range(0, len(probability)):
             #         if prob != self.perceptron_numbers[combination_number]:
@@ -31,12 +31,13 @@ class OVA:
         # for n in range(self.lower_bound, self.upper_bound):
         for perceptron_wrapper in self.perceptron_wrappers:
             prediction_certainty = perceptron_wrapper.perceptron.predict(x)
-            if prediction_certainty > 0:
-                probability[perceptron_wrapper.num_to_classify] = 1
-            else:
-                probability[perceptron_wrapper.num_to_classify] = prediction_certainty
+            # if prediction_certainty > 0:
+            #     probability[perceptron_wrapper.num_to_classify] = 1
+            # else:
+            probability[perceptron_wrapper.num_to_classify] = prediction_certainty
         sorted_probability = sorted(probability.items(), key=itemgetter(1), reverse=True)
-        print(probability)
+        if float(sorted_probability[0][0] != x.y):
+            print(str(x.y) + ": ", probability)
         return sorted_probability[0][0]
 
 class PerceptronWrapper:

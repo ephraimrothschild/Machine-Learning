@@ -10,43 +10,42 @@ class Input:
         self.y = y
 
 class BP:
-    def __init__(self, k, d, maxitter):
-        if maxitter == None:
-            self.maxitter = 1
-        else:
-            self.maxitter = maxitter
+    def __init__(self, k, d, maxitter=10, bias=1):
+        self.maxitter = maxitter
         self.d = d
         self.k = k
-        self.W = np.random.rand(k, d)
-        self.v = np.random.rand(k)
+        self.W = (np.random.rand(k, d)*2 - 1)/10
+        self.v = (np.random.rand(k)*2 - 1)/10
+        self.bias = bias
 
 
-    def train(self, inputs, en):
+    def train(self, inputs, nu):
         for _ in range(0, self.maxitter):
             random.shuffle(inputs)
-            G = np.zeros((self.k, self.d))
-            g = np.zeros(self.k)
+            all_errors = 0
             for input in inputs:
-                a = []
-                h = []
-                for i in range(0, self.k):
-                    ai = np.dot(self.W[i], input.x)
-                    a.append(ai)
-                    hi = np.tanh(ai)
-                    h.append(hi)
-                y_hat = np.dot(self.v, np.array(h))
+                wb = np.append(input.x, self.bias)
+                x = wb/np.linalg.norm(wb)
+                # x = np.append(input.x/np.linalg.norm(input.x), self.bias)
+                a = self.W.dot(x)
+                h = np.tanh(a)
+                y_hat = np.tanh(np.dot(self.v, np.array(h)))
                 error = input.y - y_hat
-                g = g - error*np.array(h)
+                all_errors = all_errors+error*error
+                # print(y_hat, input.y)
+                self.v = self.v+nu*error*np.array(h)
                 for i in range(0, self.k):
-                    G[i] = G[i] - ((error*self.v[i])*(1 - (np.tanh(a[i])**2)))*input.x
-            self.W = self.W - en*G
-            self.v = self.v - en*g
+                    self.W[i] = self.W[i] + nu*((error*self.v[i])*(1 - (np.tanh(a[i])**2)))*x
+            # print(self.v[0])
+            # print()
+            # print(all_errors)
 
     def predict(self, input):
-        h = []
-        for i in range(0, self.k):
-            h.append(np.tanh(np.dot(self.W[i], input.x)))
-        return np.dot(np.array(h), self.v)
+        wb = np.append(input.x, self.bias)
+        x = wb/np.linalg.norm(wb)
+        # x = np.append(input.x/np.linalg.norm(input.x), self.bias)
+        h = np.tanh(self.W.dot(x))
+        return np.tanh(np.dot(np.array(h), self.v))
 
 
 
@@ -56,12 +55,14 @@ def getInputs(path, num_to_classify):
     # training_file = open("usps.train", "r")
     training_file = open(path, "r")
     raw_training_data = np.loadtxt(training_file).tolist()
+    random.shuffle(raw_training_data)
     num_data = []
     not_num_data = []
     training_data = []
     for data in raw_training_data:
         training_array = data[1:]
         training_label = data[0]
+        # training_array.append(1)
         if training_label == num_to_classify:
             num_data.append(Input(training_array, 1))
         else:
@@ -73,18 +74,18 @@ def getInputs(path, num_to_classify):
 
 
 def start():
-    print("Started Training...")
+    # print("Started Training...")
     ova = Generic_OVA.OVA()
     for num in range(0, 10):
         training_data = getInputs("usps.train", num)
-        backprop = BP(10, 256, 10)
-        backprop.train(training_data, 1)
+        backprop = BP(15, 257, 20, 1)
+        backprop.train(training_data, 0.2)
         ova.add_perceptron(backprop, num)
     test(ova)
     # training_data = getInputs("usps.train", 2)
     # backprop = BP(10, 256, 10)
     # backprop.train(training_data, 1)
-    # test2(backprop, 2)
+    # test2(backprop, 5)
 
 def test2(network, num):
     test_data = getInputs("usps.test", num)
@@ -130,7 +131,9 @@ def test(multiclass):
     labels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for num in range(0, 1000):
         line = lines[num]
-        result = multiclass.predict(Input(line[1:], line[0]))
+        inVec = line[1:]
+        # inVec = np.append(inVec, 1)
+        result = multiclass.predict(Input(inVec, line[0]))
         predictions[int(result)] += 1
         labels[int(line[0])] += 1
         if result == line[0]:
