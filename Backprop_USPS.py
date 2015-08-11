@@ -78,7 +78,7 @@ def start():
     ova = Generic_OVA.OVA()
     for num in range(0, 10):
         training_data = getInputs("usps.train", num)
-        backprop = BP(15, 257, 20, 1)
+        backprop = BP(15, 257, 20)
         backprop.train(training_data, 0.2)
         ova.add_perceptron(backprop, num)
     test(ova)
